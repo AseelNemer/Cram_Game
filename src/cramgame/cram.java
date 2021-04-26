@@ -1,37 +1,48 @@
-package cramgame;
+package oday;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 public class cram {
-	
-	public static  int calculateGrundy (int n)
-	{
-		//stop condition 
-		if (n==0|| n==1) return 0;
-		
-		//A set to calculate the mex of grundy numbers .
-		Set<Integer> Set = new HashSet<Integer>();  
-		
-			for (int i=0 ; i<n/2 ;i++)
-				//the first player choose a square.
-				Set.add((calculateGrundy (n-i-2))^(calculateGrundy (i)));
+    static ArrayList<Integer> array;
 
-		//return the mex of grundy numbers.
-		return (calculateMex(Set));
-		}
-	
-	public static int calculateMex(Set<Integer> Set)
-	{
-	    int Mex = 0;
-	    while (Set.contains(Mex))
-	        Mex++;
-	    return Mex;
-	}
-	   
- public static void main(String[] args)
- {
-	 System.out.println(calculateGrundy(6));
- }
+    public static int calculateGrundy(int n) {
+        array = new ArrayList<Integer>();
+        if (n != 0 && n != 1) {
+            for(int i = 0; i <= n; ++i) {
+                array.add(i, calculate(i));
+            }
+
+            return (Integer)array.get(n);
+        } 
+            return 0; 
+    }
+
+    public static int calculate(int n) {
+        if (n != 0 && n != 1) {
+            Set<Integer> Set = new HashSet<Integer>();
+
+            for(int i = 0; i < n / 2; ++i) {
+                Set.add((Integer)array.get(n - i - 2) ^ (Integer)array.get(i));
+            }
+
+            return calculateMex(Set);
+        }
+            return 0;
+    }
+
+    public static int calculateMex(Set<Integer> Set) {
+        int Mex;
+        for(Mex = 0; Set.contains(Mex); ++Mex) {
+        }
+        return Mex;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(calculateGrundy(100));
+    }
 }
+
+	
 
