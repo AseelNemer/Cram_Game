@@ -6,42 +6,87 @@ import java.util.Set;
 
 public class cram {
 	
-	static	ArrayList<Integer> array =new ArrayList<Integer>();
+	static	ArrayList<Integer> A =new ArrayList<Integer>();
+	static	ArrayList<Integer> B =new ArrayList<Integer>();
+	static	ArrayList<Integer> C =new ArrayList<Integer>();
+	static	ArrayList<Integer> D =new ArrayList<Integer>();
+
 	public static int calculate(int n) {
-	array=new ArrayList<Integer>();
-		if (n==0|| n==1 || n==2  ) return 0;
-			if (n==3 || n==4 || n==5) return 1;
+	if (n==0|| n==1) return 0;
+		A.add(0);	A.add(0);	
+		B.add(0);   B.add(1);
+		C.add(0);	C.add(1);
+		D.add(0);	D.add(1);
 		
-		for(int i=0;i <= n;i++) {
-			array.add(i,calculateGrundy(i) );;
+
+		for(int i=2;i <= n;i++) {
+			calculateA(i);
+			calculateB(i);
+			calculateC(i);
+			calculateD(i);
 		}
 	
-		return array.get(n);
+		return A.get(n);
 		
 		
 	}
-	public static  int calculateGrundy (int n)
-	{
-		
-		//stop condition 
-		if (n==0|| n==1 || n==2  ) return 0;
-		if (n==3 || n==4 || n==5) return 1;
-		
-		//A set to calculate the mex of grundy numbers .
+	public static void calculateA(int i) {
 		Set<Integer> Set = new HashSet<Integer>();  
-		
-
-		//array.set(2, 1);
-		
-				
-			for (int i=0 ; i<n/2 ;i++)
-				//the first player choose a square.
-				Set.add((array.get(n-i-3))^(array.get(i)));
-			    
-
-		//return the mex of grundy numbers.
-		return (calculateMex(Set));
+		int k=i-2;
+		for(int j=0 ;j<=i-2;j++)
+		{
+			Set.add(A.get(j)^B.get(k));
+			k--;
 		}
+		A.add(calculateMex(Set));
+//		System.out.println("A--->" +calculateMex(Set));
+	}
+	public static void calculateB(int i) {
+		Set<Integer> Set = new HashSet<Integer>();
+		Set.add(A.get(i-1));
+		int k=i-2;
+		for(int j=0 ;j<=i-2;j++)
+		{
+			Set.add(B.get(j)^B.get(k));
+			Set.add(A.get(j)^C.get(k));
+			Set.add(A.get(j)^D.get(k));
+		}
+		B.add(calculateMex(Set));
+//		System.out.println("B--->" +calculateMex(Set));
+
+		
+	}
+	public static void calculateC(int i) {
+		Set<Integer> Set = new HashSet<Integer>();
+		Set.add(B.get(i-1));
+		int k=i-2;
+		for(int j=0 ;j<=i-2;j++)
+		{
+			Set.add(B.get(j)^D.get(k));
+		}
+		C.add(calculateMex(Set));
+//		System.out.println("C--->" +calculateMex(Set));
+
+	}
+	public static void calculateD(int i) {
+		Set<Integer> Set = new HashSet<Integer>();
+		Set.add(B.get(i-1));
+		int k=i-2;
+		for(int j=0 ;j<=i-2;j++)
+		{
+			Set.add(B.get(j)^C.get(k));
+			Set.add(D.get(j)^B.get(k));
+		}
+		D.add(calculateMex(Set));
+//		System.out.println("D--->" +calculateMex(Set));
+
+	}
+	public static void print(ArrayList<Integer> set) {
+		for(int i=0 ;i< set.size();i++)
+			System.out.print(set.get(i));
+		System.out.println('\n');
+	}
+
 	
 	public static int calculateMex(Set<Integer> Set)
 	{
@@ -53,9 +98,11 @@ public class cram {
 	   
  public static void main(String[] args)
  {
-	 System.out.println(calculate(10));
-	 System.out.println(calculate(7));
-	 
+	 System.out.println(calculate(50));
+	 print(A);
+	 print(B);
+	 print(C);
+	 print(D);
  }
 }
 
